@@ -21,15 +21,17 @@ def calc_ngrams_charfreq(invertedIndex, freqArray, text, n):
 def tokenize(word):
     regex = re.compile('[^a-zA-Z]')
     w = regex.sub('', word)
-    w.lower()
+    w = w.lower()
     return w
 
 def tokenize_word_list(wordlist):
     i = 0
-    for i in wordlist:
+    while i < len(wordlist):
         wordlist[i] = tokenize(wordlist[i])
+        i = i + 1
+    return wordlist
 
+#print tokenize('Cow.')
 
 text1 = give_word_list('austen-emma.txt')
-
 print tokenize_word_list(text1)
