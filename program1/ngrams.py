@@ -8,18 +8,24 @@ import re
 #n is the size of grams (number of tokens).
 #text is the text we're working with.
 def compute_ngram_charfreq(invertedIndex, charFreq, n, text):
+	i = 0
 	while i < len(text):
 		if (i + n) < len(text):
-			ngram = text[i:i+n] 
-			str(ngram) #converts ngram to string
-			invertedIndex.insert(ngram) #adds/inserts ngram to list invertedIndex 
+			ngram_as_list = text[i:i+n] 
+			ngram = " ".join(ngram_as_list) #converts ngram to string
 			
-		calcCharFreq(charFreq, text[i])
+			#adds/inserts ngram to dictonary invertedIndex
+			if ngram in invertedIndex:
+				invertedIndex[ngram] += 1
+			else:
+				invertedIndex[ngram] = 1
+		
+		compute_char_freq(charFreq, text[i])
 		
 		i = i + 1
 
 
-#calcCharFreq(char_freq, word) calculates the character frequency 
+#compute_char_freq(char_freq, word) calculates the character frequency 
 def compute_char_freq(char_freq, token):
 	for i in token:
 		char_freq[rank(i)] += 1
@@ -50,7 +56,7 @@ def tokenize_word_list(wordlist):
         i = i + 1
     return wordlist
 	
-	
+
 
 #####Main######
 
@@ -62,13 +68,25 @@ invertedIndex = {}
 #charFreq[1] represents the character b
 #....
 #charFreq[25] represents the character z
-global charFreq = [0] * 26
+charFreq = [0] * 26
 
 #n is the size of the n-gram 
-global n
+inverted_index = {}
+n = 2
 
 text1 = give_word_list('austen-emma.txt')
-print tokenize_word_list(text1)
-calcCharFreq(charFreq, "cattttt")
-print charFreq
+#text1 = give_word_list('test.txt')
 
+
+text1 = tokenize_word_list(text1)
+
+compute_ngram_charfreq(invertedIndex, charFreq, n, text1)
+
+#invertedIndex = sorted(invertedIndex, key = invertedIndex.value())
+
+#i = len(invertedIndex)
+#while i > 0:
+#    print "%s: %s" % (key, mydict[key])
+
+print charFreq
+#print invertedIndex
