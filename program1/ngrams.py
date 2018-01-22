@@ -71,8 +71,7 @@ invertedIndex = {}
 charFreq = [0] * 26
 
 #n is the size of the n-gram 
-inverted_index = {}
-n = 2
+n = 3
 
 text1 = give_word_list('austen-emma.txt')
 #text1 = give_word_list('test.txt')
@@ -89,4 +88,14 @@ compute_ngram_charfreq(invertedIndex, charFreq, n, text1)
 #    print "%s: %s" % (key, mydict[key])
 
 print charFreq
-#print invertedIndex
+
+IItuples = [(value, key) for key, value in invertedIndex.iteritems()]
+SortedTuples = sorted(IItuples, key=lambda x: x[0], reverse=True)
+
+#print IItuples
+#print SortedShit
+
+j = 0
+while j < 10:
+	print SortedTuples[j]
+	j += 1
