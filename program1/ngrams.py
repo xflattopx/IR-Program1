@@ -48,14 +48,22 @@ def tokenize(word):
     w = w.lower()
     return w
 
-#tokenizes a listof words
+#tokenizes a list of words
 def tokenize_word_list(wordlist):
     i = 0
     while i < len(wordlist):
         wordlist[i] = tokenize(wordlist[i])
         i = i + 1
     return wordlist
-	
+
+#writes the charater frequency to an output file
+def write_char_freq(charFreq):
+    outf = open('charfreq.txt', 'w')
+    i = 0
+    while i < len(charFreq):
+        outf.write(chr(i + 97) + " : " + str(charFreq[i]) + "\n")
+        i += 1
+    outf.close()
 
 
 #####Main######
@@ -71,7 +79,7 @@ invertedIndex = {}
 charFreq = [0] * 26
 
 #n is the size of the n-gram 
-n = 3
+n = 2
 
 text1 = give_word_list('austen-emma.txt')
 #text1 = give_word_list('test.txt')
@@ -93,9 +101,11 @@ IItuples = [(value, key) for key, value in invertedIndex.iteritems()]
 SortedTuples = sorted(IItuples, key=lambda x: x[0], reverse=True)
 
 #print IItuples
-#print SortedShit
+#print SortedTuples
 
 j = 0
 while j < 10:
 	print SortedTuples[j]
 	j += 1
+
+write_char_freq(charFreq)
