@@ -43,7 +43,7 @@ def give_word_list(filename):
 
 #tokenizes a word
 def tokenize(word):
-    regex = re.compile('[^a-zA-Z]')
+    regex = re.compile('[^a-zA-Z]+')
     w = regex.sub('', word)
     w = w.lower()
     return w
@@ -52,6 +52,7 @@ def tokenize(word):
 def tokenize_word_list(wordlist):
     i = 0
     while i < len(wordlist):
+	#regex = re.compile('[^a-zA-Z]+')
         wordlist[i] = tokenize(wordlist[i])
         i = i + 1
     return wordlist
@@ -64,6 +65,16 @@ def write_char_freq(charFreq):
         outf.write(chr(i + 97) + " : " + str(charFreq[i]) + "\n")
         i += 1
     outf.close()
+
+#read in all the files in a loop
+def processCorpus(inputList, charFreq, invertedIndex):
+    i = 0
+    while i < len(inputList):
+        text = give_word_list(inputList[i])
+	print("processing %s" %inputList[i])
+	text = tokenize_word_list(text)
+	compute_ngram_charfreq(invertedIndex, charFreq, n, text)
+	i +=  1
 
 
 #####Main######
@@ -81,19 +92,8 @@ charFreq = [0] * 26
 #n is the size of the n-gram 
 n = 2
 
-text1 = give_word_list('austen-emma.txt')
-#text1 = give_word_list('test.txt')
-
-
-text1 = tokenize_word_list(text1)
-
-compute_ngram_charfreq(invertedIndex, charFreq, n, text1)
-
-#invertedIndex = sorted(invertedIndex, key = invertedIndex.value())
-
-#i = len(invertedIndex)
-#while i > 0:
-#    print "%s: %s" % (key, mydict[key])
+inputFiles = give_word_list('input-files.txt')
+processCorpus(inputFiles, charFreq, invertedIndex)
 
 print charFreq
 
