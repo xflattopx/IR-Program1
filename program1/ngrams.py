@@ -10,11 +10,12 @@ import re
 def compute_ngram_charfreq(invertedIndex, charFreq, n, text):
 	i = 0
 	while i < len(text):
-		if (i + n) < len(text):
+		if (i + n) <= len(text):
 			ngram_as_list = text[i:i+n] 
 			ngram = " ".join(ngram_as_list) #converts ngram to string
 			
 			#adds/inserts ngram to dictonary invertedIndex
+			#print "The current ngram is:  %s" %ngram
 			if ngram in invertedIndex:
 				invertedIndex[ngram] += 1
 			else:
@@ -38,6 +39,14 @@ def rank(char):
 #returns list of words from file called filename
 def give_word_list(filename):
     f = open(filename, 'r')
+    words = []
+    for line in f:
+        for token in line.split():
+            words.extend(token.split('-'))
+    return words
+
+def give_file_path(filename):
+    f = open(filename, 'r')
     words = [token for line in f for token in line.split()]
     return words
 
@@ -52,9 +61,12 @@ def tokenize(word):
 def tokenize_word_list(wordlist):
     i = 0
     while i < len(wordlist):
-	#regex = re.compile('[^a-zA-Z]+')
-        wordlist[i] = tokenize(wordlist[i])
-        i = i + 1
+        temp = tokenize(wordlist[i])
+        if temp != '':
+            wordlist[i] = tokenize(wordlist[i])
+            i = i + 1
+        else:
+            del wordlist[i]
     return wordlist
 
 #writes the charater frequency to an output file
@@ -92,10 +104,22 @@ charFreq = [0] * 26
 #n is the size of the n-gram 
 n = 2
 
-inputFiles = give_word_list('input-files.txt')
+inputFiles = give_file_path('input-files.txt')
 processCorpus(inputFiles, charFreq, invertedIndex)
 
 print charFreq
+
+'''
+#test!!!!!!!!!!!!!!!
+test = give_word_list("test.txt")
+print test
+test = tokenize_word_list(test)
+print test
+compute_ngram_charfreq(invertedIndex, charFreq, n, test)
+#test
+'''
+
+
 
 IItuples = [(value, key) for key, value in invertedIndex.iteritems()]
 SortedTuples = sorted(IItuples, key=lambda x: x[0], reverse=True)
